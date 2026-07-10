@@ -3,76 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Kanibal Store</title>
+
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#111;
-    color:#fff;
+background:#111;
+color:white;
 }
+
 header{
-    background:#00c853;
-    padding:20px;
-    text-align:center;
+background:#00c853;
+padding:20px;
+text-align:center;
 }
+
+header h1{
+font-size:40px;
+}
+
 nav{
-    background:#222;
-    padding:10px;
-    text-align:center;
+background:#000;
+padding:15px;
+text-align:center;
 }
+
 nav a{
-    color:white;
-    text-decoration:none;
-    margin:0 15px;
+color:white;
+text-decoration:none;
+margin:15px;
+font-weight:bold;
 }
+
 .hero{
-    padding:50px 20px;
-    text-align:center;
+padding:80px 20px;
+text-align:center;
+background:#1b1b1b;
 }
+
+.hero h2{
+font-size:40px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:20px;
+margin-bottom:30px;
+}
+
 .btn{
-    display:inline-block;
-    background:#00c853;
-    color:white;
-    padding:12px 25px;
-    border-radius:8px;
-    text-decoration:none;
+background:#00c853;
+color:white;
+padding:15px 35px;
+text-decoration:none;
+border-radius:8px;
+display:inline-block;
+font-weight:bold;
 }
-.produk{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
-    padding:20px;
+
+.section{
+padding:50px 20px;
 }
+
+.section h2{
+text-align:center;
+margin-bottom:40px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
 .card{
-    background:#222;
-    width:250px;
-    border-radius:10px;
-    padding:15px;
-    text-align:center;
+background:#222;
+border-radius:10px;
+overflow:hidden;
+text-align:center;
+padding-bottom:20px;
 }
+
 .card img{
-    width:100%;
-    border-radius:8px;
+width:100%;
+height:260px;
+object-fit:cover;
 }
+
+.card h3{
+margin:15px 0;
+}
+
+.price{
+font-size:22px;
+color:#00ff66;
+margin-bottom:15px;
+}
+
+.buy{
+background:#00c853;
+padding:12px 25px;
+display:inline-block;
+color:white;
+text-decoration:none;
+border-radius:6px;
+}
+
 footer{
-    background:#000;
-    padding:20px;
-    text-align:center;
+background:#000;
+padding:30px;
+text-align:center;
+margin-top:60px;
 }
 </style>
+
 </head>
 
 <body>
 
 <header>
 <h1>KANIBAL STORE</h1>
-<p>Fashion Streetwear Premium</p>
+<p>Streetwear Premium Indonesia</p>
 </header>
 
 <nav>
-<a href="#">Home</a>
+<a href="#">Beranda</a>
 <a href="#">Produk</a>
 <a href="#">Tentang</a>
 <a href="#">Kontak</a>
@@ -80,33 +142,78 @@ footer{
 
 <section class="hero">
 <h2>Selamat Datang di Kanibal Store</h2>
-<p>Temukan koleksi streetwear terbaik kami.</p>
+
+<p>
+Kaos, Hoodie, Jersey dan Apparel Streetwear Berkualitas Premium.
+</p>
+
 <a class="btn" href="#">Belanja Sekarang</a>
-</section>
+<section class="section">
 
-<section class="produk">
+<h2>Produk Terbaru</h2>
+
+<div class="grid">
+
 <div class="card">
-<img src="https://via.placeholder.com/250x250?text=Kaos" alt="Kaos">
-<h3>Kaos Oversize</h3>
-<p>Rp135.000</p>
+<img src="https://via.placeholder.com/400x500?text=Kaos+Kanibal" alt="Kaos">
+<h3>Kaos Kanibal Premium</h3>
+<div class="price">Rp129.000</div>
+<a class="buy" href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Kaos%20Kanibal%20Premium">Beli Sekarang</a>
 </div>
 
 <div class="card">
-<img src="https://via.placeholder.com/250x250?text=Hoodie" alt="Hoodie">
-<h3>Hoodie Premium</h3>
-<p>Rp275.000</p>
+<img src="https://via.placeholder.com/400x500?text=Hoodie" alt="Hoodie">
+<h3>Hoodie Kanibal</h3>
+<div class="price">Rp249.000</div>
+<a class="buy" href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Hoodie%20Kanibal">Beli Sekarang</a>
 </div>
 
 <div class="card">
-<img src="https://via.placeholder.com/250x250?text=Topi" alt="Topi">
-<h3>Topi Snapback</h3>
-<p>Rp95.000</p>
+<img src="https://via.placeholder.com/400x500?text=Jersey" alt="Jersey">
+<h3>Jersey Streetwear</h3>
+<div class="price">Rp189.000</div>
+<a class="buy" href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Jersey">Beli Sekarang</a>
 </div>
+
+<div class="card">
+<img src="https://via.placeholder.com/400x500?text=Topi" alt="Topi">
+<h3>Topi Kanibal</h3>
+<div class="price">Rp89.000</div>
+<a class="buy" href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Topi">Beli Sekarang</a>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/400x500?text=Tas" alt="Tas">
+<h3>Tas Kanibal</h3>
+<div class="price">Rp159.000</div>
+<a class="buy" href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Tas">Beli Sekarang</a>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/400x500?text=Jaket" alt="Jaket">
+<h3>Jaket Kanibal</h3>
+<div class="price">Rp329.000</div>
+<a class="buy" href="https://wa.me/6281234567890?text=Saya%20ingin%20memesan%20Jaket">Beli Sekarang</a>
+</div>
+
+</div>
+
 </section>
 
 <footer>
-©️ 2026 Kanibal Store
+
+<h3>Kanibal Store</h3>
+
+<p>Fashion Streetwear Premium Indonesia</p>
+
+<p>Email : kanibalstore@gmail.com</p>
+
+<p>Instagram : @kanibalstore</p>
+
+<p>&copy; 2026 Kanibal Store. All Rights Reserved.</p>
+
 </footer>
 
 </body>
 </html>
+</section>
