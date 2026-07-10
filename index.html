@@ -4,33 +4,66 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kanibal Store</title>
-
 <style>
 body{
     margin:0;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#111;
-    color:white;
+    color:#fff;
 }
 header{
-    background:#16a34a;
+    background:#00c853;
     padding:20px;
     text-align:center;
 }
+nav{
+    background:#222;
+    padding:10px;
+    text-align:center;
+}
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:0 15px;
+}
 .hero{
-    padding:60px 20px;
+    padding:50px 20px;
     text-align:center;
 }
 .btn{
-    background:#16a34a;
+    display:inline-block;
+    background:#00c853;
     color:white;
     padding:12px 25px;
+    border-radius:8px;
     text-decoration:none;
+}
+.produk{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+    padding:20px;
+}
+.card{
+    background:#222;
+    width:250px;
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+}
+.card img{
+    width:100%;
     border-radius:8px;
 }
+footer{
+    background:#000;
+    padding:20px;
+    text-align:center;
+}
 </style>
-
 </head>
+
 <body>
 
 <header>
@@ -38,12 +71,42 @@ header{
 <p>Fashion Streetwear Premium</p>
 </header>
 
-<div class="hero">
+<nav>
+<a href="#">Home</a>
+<a href="#">Produk</a>
+<a href="#">Tentang</a>
+<a href="#">Kontak</a>
+</nav>
+
+<section class="hero">
 <h2>Selamat Datang di Kanibal Store</h2>
-<p>Koleksi Kaos, Hoodie dan Apparel Berkualitas.</p>
-<br>
-<a class="btn" href="https://wa.me/085889005723">Pesan Sekarang</a>
+<p>Temukan koleksi streetwear terbaik kami.</p>
+<a class="btn" href="#">Belanja Sekarang</a>
+</section>
+
+<section class="produk">
+<div class="card">
+<img src="https://via.placeholder.com/250x250?text=Kaos" alt="Kaos">
+<h3>Kaos Oversize</h3>
+<p>Rp135.000</p>
 </div>
+
+<div class="card">
+<img src="https://via.placeholder.com/250x250?text=Hoodie" alt="Hoodie">
+<h3>Hoodie Premium</h3>
+<p>Rp275.000</p>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/250x250?text=Topi" alt="Topi">
+<h3>Topi Snapback</h3>
+<p>Rp95.000</p>
+</div>
+</section>
+
+<footer>
+©️ 2026 Kanibal Store
+</footer>
 
 </body>
 </html>
