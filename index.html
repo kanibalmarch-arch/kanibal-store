@@ -4,17 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kanibal Store</title>
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS untuk Desain Modern -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Alpine.js Versi Stabil Non-Bloking -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js"></script>
+  <!-- Alpine.js Versi Stabil -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased" x-data="tokoOnline()">
 
-  <!-- NAVBAR -->
+  <!-- NAVBAR & TOMBOL KERANJANG -->
   <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-slate-100">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
       <h1 class="text-2xl font-black tracking-wider text-slate-900">KANIBAL STORE</h1>
+      
       <button @click="bukaKeranjang = true" class="relative p-2 bg-slate-100 hover:bg-slate-200 rounded-full transition">
         🛒
         <span x-show="keranjang.length > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold" x-text="keranjang.length"></span>
@@ -22,20 +23,21 @@
     </div>
   </nav>
 
-  <!-- HERO & FILTER -->
+  <!-- HERO & PENCARIAN & KATEGORI -->
   <header class="max-w-7xl mx-auto px-4 mt-8">
     <div class="bg-slate-950 text-white p-8 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-6">
       <div>
         <h2 class="text-3xl font-bold">Koleksi Pakaian Terbaik</h2>
         <p class="text-slate-400 mt-2 text-sm">Temukan gaya otentikmu di sini.</p>
       </div>
+      
+      <!-- Kolom Pencarian -->
       <div class="w-full md:w-72">
-        <!-- Input pencarian dipastikan membaca string kosong di awal, bukan undefined -->
         <input type="text" x-model="cari" placeholder="Cari produk..." class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-slate-500">
       </div>
     </div>
 
-    <!-- KATEGORI -->
+    <!-- Pilihan Menu Kategori -->
     <div class="flex gap-2 mt-6 overflow-x-auto pb-2">
       <template x-for="kat in ['Semua', 'Kaos', 'Hoodie', 'Jaket', 'Jersey', 'Tas', 'Topi']">
         <button @click="kategoriTerpilih = kat" 
@@ -46,7 +48,7 @@
     </div>
   </header>
 
-  <!-- GRID PRODUK -->
+  <!-- GRID PRODUK & GALERI FOTO Halaman Utama -->
   <main class="max-w-7xl mx-auto px-4 my-8">
     <div class="grid grid-cols-1 gap-8">
       <template x-for="produk in produkTersaring()" :key="produk.id">
@@ -57,6 +59,7 @@
             <div class="w-full aspect-square bg-slate-100 rounded-xl overflow-hidden border border-slate-150">
               <img :src="produk.foto[produk.fotoAktif]" class="w-full h-full object-cover">
             </div>
+            <!-- Indikator Kotak Klik Foto Banyak Sisi -->
             <div class="flex gap-2 overflow-x-auto pb-1">
               <template x-for="(fotoUrl, index) in produk.foto">
                 <button @click="produk.fotoAktif = index" 
@@ -66,24 +69,28 @@
                 </button>
               </template>
             </div>
+            <p class="text-xs text-slate-400 text-center font-medium">✨ Klik kotak gambar kecil di atas untuk ganti foto</p>
           </div>
 
-          <!-- KANAN: Info Detail -->
+          <!-- KANAN: Detail Informasi -->
           <div class="flex-1 flex flex-col justify-between py-2">
             <div>
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full uppercase" x-text="produk.kategori"></span>
-                <span class="text-xs text-amber-500">⭐ 5.0</span>
+                <span class="text-xs text-amber-500 font-medium">⭐ 5.0 (Ulasan Produk)</span>
               </div>
-              <h3 class="font-extrabold text-slate-900 text-xl md:text-2xl mt-3" x-text="produk.nama"></h3>
-              <p class="text-emerald-600 font-black text-2xl mt-2" x-text="'Rp ' + produk.harga.toLocaleString('id-ID')"></p>
+              
+              <h3 class="font-extrabold text-slate-900 text-xl md:text-2xl mt-3 tracking-tight" x-text="produk.nama"></h3>
+              <p class="text-emerald-600 font-black text-2xl mt-2 tracking-tight" x-text="'Rp ' + produk.harga.toLocaleString('id-ID')"></p>
+              
               <div class="mt-4 pt-4 border-t border-slate-100">
-                <h4 class="text-xs font-bold text-slate-400 uppercase">Deskripsi:</h4>
-                <p class="text-sm text-slate-600 mt-1">Bahan premium pilihan, nyaman dipakai, dan sablon rapi presisi.</p>
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Deskripsi:</h4>
+                <p class="text-sm text-slate-600 mt-1 leading-relaxed" x-text="produk.deskripsi"></p>
               </div>
             </div>
+
             <div class="mt-6 pt-4 border-t border-slate-100">
-              <button @click="tambahKeKeranjang(produk)" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition">
+              <button @click="tambahKeKeranjang(produk)" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl transition shadow-sm flex items-center justify-center gap-2">
                 🛒 Masukkan ke Keranjang
               </button>
             </div>
@@ -104,7 +111,7 @@
     </div>
   </section>
 
-  <!-- KERANJANG MODAL -->
+  <!-- MODAL PANEL KERANJANG -->
   <div x-show="bukaKeranjang" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end" x-cloak style="display: none;">
     <div @click.away="bukaKeranjang = false" class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between shadow-2xl">
       <div>
@@ -129,24 +136,31 @@
           </template>
         </div>
       </div>
+      
+      <!-- Formulir Checkout Alamat & Ongkir -->
       <div class="border-t pt-4" x-show="keranjang.length > 0">
         <div class="space-y-2 mb-4">
           <input type="text" x-model="alamat.nama" placeholder="Nama Lengkap" class="w-full p-2 border rounded-lg text-sm">
           <input type="text" x-model="alamat.kota" placeholder="Kota / Kabupaten" class="w-full p-2 border rounded-lg text-sm">
           <select x-model="alamat.kurir" @change="hitungOngkir()" class="w-full p-2 border rounded-lg text-sm">
-            <option value="">Pilih Ekspedisi</option>
+            <option value="">Pilih Ekspedisi (Hitung Ongkir)</option>
             <option value="JNE">JNE (Rp 15.000)</option>
             <option value="J&T">J&T (Rp 16.000)</option>
           </select>
         </div>
-        <div class="space-y-1 text-sm mb-3">
-          <div class="flex justify-between"><span>Total:</span><span class="font-black text-emerald-600 text-lg" x-text="'Rp ' + (totalHarga() + ongkir).toLocaleString('id-ID')"></span></div>
+        <div class="space-y-1 text-sm border-b pb-3 mb-3">
+          <div class="flex justify-between"><span>Subtotal:</span><span class="font-bold" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></span></div>
+          <div class="flex justify-between"><span>Ongkos Kirim:</span><span class="font-bold" x-text="'Rp ' + ongkir.toLocaleString('id-ID')"></span></div>
+          <div class="flex justify-between text-lg font-black text-emerald-600"><span>Total Bayar:</span><span x-text="'Rp ' + (totalHarga() + ongkir).toLocaleString('id-ID')"></span></div>
         </div>
-        <button @click="checkoutWhatsApp()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl">Checkout via WA</button>
+        <button @click="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition">
+          📱 Checkout Otomatis via WA
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- CORE SCRIPT ENGINE -->
   <script>
     function tokoOnline() {
       return {
@@ -156,14 +170,17 @@
         keranjang: [],
         ongkir: 0,
         alamat: { nama: '', kota: '', kurir: '' },
+        
+        // Database Produk Resmi
         produk: [
-          { id: 1, nama: 'Kaos Kanibal Premium', kategori: 'Kaos', harga: 85000, foto: ['kaos kanibal depan.png'], fotoAktif: 0 },
-          { id: 2, nama: 'Hoodie Kanibal Streetwear', kategori: 'Hoodie', harga: 185000, foto: ['hoodie kanibal depan.png'], fotoAktif: 0 },
-          { id: 3, nama: 'Jaket Coach Kanibal', kategori: 'Jaket', harga: 165000, foto: ['jaket.png'], fotoAktif: 0 },
-          { id: 4, nama: 'Jersey Sport Kanibal', kategori: 'Jersey', harga: 95000, foto: ['jersey kanibal.png'], fotoAktif: 0 },
-          { id: 5, nama: 'Tas Ransel Kanibal', kategori: 'Tas', harga: 125000, foto: ['tas kanibal.png'], fotoAktif: 0 },
-          { id: 6, nama: 'Topi Snapback Kanibal', kategori: 'Topi', harga: 45000, foto: ['topi kanibal.png'], fotoAktif: 0 }
+          { id: 1, nama: 'Kaos Kanibal - Identity in Simplicity', kategori: 'Kaos', harga: 125000, foto: ['kaos kanibal depan.png', 'jersey kanibal.png'], fotoAktif: 0, deskripsi: 'Kaos bertema minimalis modern dengan tagline "Identity in Simplicity". Dibuat menggunakan bahan katun premium super adem, sangat nyaman untuk penggunaan harian, serta memiliki potongan pola yang pas badan.' },
+          { id: 2, nama: 'Hoodie Kanibal Streetwear', kategori: 'Hoodie', harga: 225000, foto: ['hoodie kanibal depan.png'], fotoAktif: 0, deskripsi: 'Hoodie bersiluet kasual dengan bahan fleece tebal premium yang lembut di kulit. Jahitan rapi berkekuatan ganda cocok dipadukan dengan gaya jalanan (streetwear) masa kini.' },
+          { id: 3, nama: 'Jaket Bomber Kanibal', kategori: 'Jaket', harga: 355000, foto: ['jaket.png'], fotoAktif: 0, deskripsi: 'Jaket jenis coach fungsional berbahan taslan tahan angin ringan. Dilengkapi kancing klip premium dan saku dalam, pas untuk berkendara motor atau nongkrong malam.' },
+          { id: 4, nama: 'Jersey casual Kanibal', kategori: 'Jersey', harga: 135000, foto: ['jersey kanibal.png'], fotoAktif: 0, deskripsi: 'Jersey olahraga dengan material berpori mikro (dry-fit) anti gerah yang sangat cepat menyerap keringat. Nyaman maksimal untuk futsal, lari, maupun olahraga berat.' },
+          { id: 5, nama: 'Tas handbag Kanibal', kategori: 'Tas', harga: 165000, foto: ['tas kanibal.png'], fotoAktif: 0, deskripsi: 'Tas ransel berkapasitas besar dengan slot laptop khusus berlapis busa pengaman. Tahan cipratan air ringan, cocok mendampingi rutinitas kerja atau sekolah.' },
+          { id: 6, nama: 'Topi Snapback Kanibal', kategori: 'Topi', harga: 75000, foto: ['topi kanibal.png'], fotoAktif: 0, deskripsi: 'Topi model snapback berstruktur kokoh dengan pengatur ukuran sabuk di bagian belakang. Detail bordir timbul eksklusif mempertegas aksen kasual harianmu.' }
         ],
+
         produkTersaring() {
           return this.produk.filter(p => {
             const cocokKategori = this.kategoriTerpilih === 'Semua' || p.kategori === this.kategoriTerpilih;
@@ -183,10 +200,18 @@
           return this.keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
         },
         checkoutWhatsApp() {
-          let nomorWA = "628123456789"; // Ganti dengan nomor WA-mu
-          let teks = Halo Kanibal Store, saya mau order:\n;
-          this.keranjang.forEach(i => { teks += - ${i.nama} (${i.qty}x)\n; });
-          teks += Total: Rp ${(this.totalHarga() + this.ongkir).toLocaleString('id-ID')};
+          if (!this.alamat.nama || !this.alamat.kota || !this.alamat.kurir) {
+            alert('Mohon isi alamat lengkap dan kurir terlebih dahulu!');
+            return;
+          }
+          let nomorWA = "6285889005723"; // Ganti dengan nomor WA tokomu (awal 62)
+          let teks = *Halo Admin Kanibal Store, saya mau pesan:*\n\n;
+          this.keranjang.forEach(i => { teks += • ${i.nama} (${i.qty}x)\n; });
+          teks += \n*Detail Alamat & Kiriman:*;
+          teks += \nNama Lengkap: ${this.alamat.nama};
+          teks += \nKota Tujuan: ${this.alamat.kota};
+          teks += \nEkspedisi: ${this.alamat.kurir} (Ongkir: Rp ${this.ongkir.toLocaleString('id-ID')});
+          teks += \n\n*Total Tagihan Akhir: Rp ${(this.totalHarga() + this.ongkir).toLocaleString('id-ID')}*;
           window.open(https://api.whatsapp.com/send?phone=${nomorWA}&text=${encodeURIComponent(teks)}, '_blank');
         }
       }
