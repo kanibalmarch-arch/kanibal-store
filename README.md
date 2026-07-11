@@ -1,1 +1,1 @@
-# kanibal-store
+perubahan terakhir: 2026
