@@ -51,33 +51,45 @@
 
   <!-- GRID PRODUK & GALERI FOTO -->
   <main class="max-w-7xl mx-auto px-4 my-8">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <template x-for="produk in produkTersaring()" :key="produk.id">
-        <div class="bg-white rounded-2xl border border-slate-150 overflow-hidden shadow-sm flex flex-col justify-between group">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row gap-6 lg:col-span-3:>
           
-          <!-- area gambar & galeri mini -->
-          <div class="relative bg-slate-100 aspect-square overflow-hidden">
-            <img :src="produk.foto[produk.fotoAktif]" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-            
-            <!-- Indikator Banyak Foto (Galeri) -->
-            <div class="absolute bottom-2 left-2 flex gap-1 bg-black/40 p-1 rounded-lg backdrop-blur-sm">
-              <template x-for="(f, index) in produk.foto">
+          <!-- KIRI: Frame Foto Utama (Membatasi ukuran gambar agar tidak kebesaran) -->
+          <div class="w-full md:w-2/5 flex flex-col gap-4">
+          <div class="w-full aspect-square bg-slate-100 rounded-xl overlow-hidden border border-slate-150">
+            <img :src="produk.foto[produk.fotoAktif]" class="w-full h-full object-cover">
+          </div>
+            <!-- Thumbnail Galeri Pilihan Foto -->
+            <div class="flex gap-2 overflow-x-auto pb-1">
+              <template x-for="(fotoUrl, index) in produk.foto">
                 <button @click="produk.fotoAktif = index" 
-                        :class="produk.fotoAktif === index ? 'bg-white w-4' : 'bg-white/50 w-2'" 
-                        class="h-2 rounded-full transition-all duration-300"></button>
+                        :class="produk.fotoAktif === index ? 'border-slate-900 ring-2 ring-slate-900/10' : 'border-slate-200" 
+                        class="w-20 h-20 bg-slate-50 border-2 rounded-lg overflow-hidden flex-shrink-0 transition-all>
+                  <img :src="fotoUrl" class="w-full h-full object-cover">
+                </button>
               </template>
             </div>
-          </div>
-
-          <!-- detail produk -->
-          <div class="p-4 flex-1 flex flex-col justify-between">
+          <p class="text-xs text-slate-400 text-center"✨ Klik kotak kecil untuk ganti foto</p>
+        </div>
+          <!-- KANAN: Detail Informasi & Tombol Beli -->
+          <div class="flex-1 flex flex-col justify-between py-2">
             <div>
-              <span class="text-xs font-bold text-slate-400 tracking-wider uppercase" x-text="produk.kategori"></span>
-              <h3 class="font-bold text-slate-800 mt-1 text-sm md:text-base" x-text="produk.nama"></h3>
-              <p class="text-emerald-600 font-extrabold mt-1" x-text="'Rp ' + produk.harga.toLocaleString('id-ID')"></p>
+             <div class="flex item-center gap-2">
+              <span class="text-xs font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full uppercase" x-text="produk.kategori"></span>
+              <span class="text-xs text-amber-500">⭐ 5.0</span>
             </div>
-            <button @click="tambahKeKeranjang(produk)" class="w-full mt-4 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2.5 rounded-xl transition">
-              + Keranjang
+              <h3 class="font-extrabold text-slate-900 text-xl md:text-2xl mt-3" x-text="produk.nama"></h3>
+              <p class="text-emerald-600 font-black text-2xl mt-2" x-text="'Rp ' + produk.harga.toLocaleString('id-ID')"></p>
+
+              <dip class="mt-4 pt-4 border-t border-slate-100">
+               <h4 class="text-xs font-bold text-slate-400 uppercase">Deskripsi:</h4>
+               <p class=text-sm text-slate-600 mt-1">Bahan premium pilihan, nyaman dipakai, dan sablon rapi presisi.</p>
+            </div>
+          </div>
+         <div class="mt-6 pt-4 border-t border-slate-100">
+            <button @click="tambahKeKeranjang(produk)" class="w-full mt-4 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition">
+              🛒 Masukkan ke Keranjang
             </button>
           </div>
         </div>
