@@ -1,219 +1,239 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Kanibal Store</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#111;
-color:white;
-}
-
-header{
-background:#00c853;
-padding:20px;
-text-align:center;
-}
-
-header h1{
-font-size:40px;
-}
-
-nav{
-background:#000;
-padding:15px;
-text-align:center;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-margin:15px;
-font-weight:bold;
-}
-
-.hero{
-padding:80px 20px;
-text-align:center;
-background:#1b1b1b;
-}
-
-.hero h2{
-font-size:40px;
-margin-bottom:20px;
-}
-
-.hero p{
-font-size:20px;
-margin-bottom:30px;
-}
-
-.btn{
-background:#00c853;
-color:white;
-padding:15px 35px;
-text-decoration:none;
-border-radius:8px;
-display:inline-block;
-font-weight:bold;
-}
-
-.section{
-padding:50px 20px;
-}
-
-.section h2{
-text-align:center;
-margin-bottom:40px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-}
-
-.card{
-background:#222;
-border-radius:10px;
-overflow:hidden;
-text-align:center;
-padding-bottom:20px;
-}
-
-.card img{
-width:100%;
-height:260px;
-object-fit:cover;
-}
-
-.card h3{
-margin:15px 0;
-}
-
-.price{
-font-size:22px;
-color:#00ff66;
-margin-bottom:15px;
-}
-
-.buy{
-background:#00c853;
-padding:12px 25px;
-display:inline-block;
-color:white;
-text-decoration:none;
-border-radius:6px;
-}
-
-footer{
-background:#000;
-padding:30px;
-text-align:center;
-margin-top:60px;
-}
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanibal Store</title>
+  <!-- Tailwind CSS untuk Desain Modern -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js untuk Logika Keranjang & Pencarian Otomatis -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
+<body class="bg-slate-50 text-slate-800 antialiased" x-data="tokoOnline()">
 
-<body>
+  <!-- NAVBAR & KERANJANG BELANJA -->
+  <nav class="bg-white shadow-sm sticky top-0 z-50 border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-black tracking-wider text-slate-900">KANIBAL STORE</h1>
+      
+      <!-- Tombol Keranjang -->
+      <button @click="bukaKeranjang = true" class="relative p-2 bg-slate-100 hover:bg-slate-200 rounded-full transition">
+        🛒
+        <span x-show="keranjang.length > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold" x-text="keranjang.length"></span>
+      </button>
+    </div>
+  </nav>
 
-<header>
-<h1>KANIBAL STORE</h1>
-<p>Streetwear Premium Indonesia</p>
-</header>
+  <!-- HERO & PENCARIAN / KATEGORI -->
+  <header class="max-w-7xl mx-auto px-4 mt-8">
+    <div class="bg-slate-950 text-white p-8 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-6">
+      <div>
+        <h2 class="text-3xl font-bold">Koleksi Pakaian Terbaik</h2>
+        <p class="text-slate-400 mt-2 text-sm">Temukan gaya otentikmu di sini.</p>
+      </div>
+      
+      <!-- Fitur Pencarian -->
+      <div class="w-full md:w-72">
+        <input type="text" x-model="cari" placeholder="Cari produk..." class="w-full px-4 py-2.5 bg-slate-850 border border-slate-700 rounded-xl text-black focus:outline-none focus:ring-2 focus:ring-slate-500">
+      </div>
+    </div>
 
-<nav>
-<a href="#">Beranda</a>
-<a href="#">Produk</a>
-<a href="#">Tentang</a>
-<a href="#">Kontak</a>
-</nav>
+    <!-- Fitur Kategori -->
+    <div class="flex gap-2 mt-6 overflow-x-auto pb-2">
+      <template x-for="kat in ['Semua', 'Kaos', 'Hoodie', 'Jaket', 'Jersey', 'Tas', 'Topi']">
+        <button @click="kategoriTerpilih = kat" 
+                :class="kategoriTerpilih === kat ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 hover:bg-slate-100'"
+                class="px-4 py-2 rounded-full text-sm font-medium border border-slate-200 transition whitespace-nowrap"
+                x-text="kat"></button>
+      </template>
+    </div>
+  </header>
 
-<section class="hero">
-<h2>Selamat Datang di Kanibal Store</h2>
+  <!-- GRID PRODUK & GALERI FOTO -->
+  <main class="max-w-7xl mx-auto px-4 my-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <template x-for="produk in produkTersaring()" :key="produk.id">
+        <div class="bg-white rounded-2xl border border-slate-150 overflow-hidden shadow-sm flex flex-col justify-between group">
+          
+          <!-- area gambar & galeri mini -->
+          <div class="relative bg-slate-100 aspect-square overflow-hidden">
+            <img :src="produk.foto[produk.fotoAktif]" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            
+            <!-- Indikator Banyak Foto (Galeri) -->
+            <div class="absolute bottom-2 left-2 flex gap-1 bg-black/40 p-1 rounded-lg backdrop-blur-sm">
+              <template x-for="(f, index) in produk.foto">
+                <button @click="produk.fotoAktif = index" 
+                        :class="produk.fotoAktif === index ? 'bg-white w-4' : 'bg-white/50 w-2'" 
+                        class="h-2 rounded-full transition-all duration-300"></button>
+              </template>
+            </div>
+          </div>
 
-<p>
-Kaos, Hoodie, Jersey dan Apparel Streetwear Berkualitas Premium.
-</p>
+          <!-- detail produk -->
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold text-slate-400 tracking-wider uppercase" x-text="produk.kategori"></span>
+              <h3 class="font-bold text-slate-800 mt-1 text-sm md:text-base" x-text="produk.nama"></h3>
+              <p class="text-emerald-600 font-extrabold mt-1" x-text="'Rp ' + produk.harga.toLocaleString('id-ID')"></p>
+            </div>
+            <button @click="tambahKeKeranjang(produk)" class="w-full mt-4 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2.5 rounded-xl transition">
+              + Keranjang
+            </button>
+          </div>
+        </div>
+      </template>
+    </div>
+  </main>
 
-<a class="btn" href="#">Belanja Sekarang</a>
-<section class="section">
+  <!-- SECTION TESTIMONI -->
+  <section class="max-w-7xl mx-auto px-4 py-8 border-t border-slate-200">
+    <h3 class="text-xl font-bold text-slate-900 mb-6">Ulasan Pelanggan ⭐⭐⭐⭐⭐</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <p class="text-slate-600 text-sm">"Bahan kaosnya lembut dan adem banget, sablonannya presisi. Keren pol!"</p>
+        <h4 class="font-bold text-slate-800 mt-4 text-sm">- Andika R.</h4>
+      </div>
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <p class="text-slate-600 text-sm">"Hoodie-nya tebal tapi gak bikin gerah. Pas dikirim rapi banget packing-nya."</p>
+        <h4 class="font-bold text-slate-800 mt-4 text-sm">- Budi S.</h4>
+      </div>
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <p class="text-slate-600 text-sm">"Pengiriman cepat, adminnya ramah pas konfirmasi via WA. Rekomen!"</p>
+        <h4 class="font-bold text-slate-800 mt-4 text-sm">- Citra K.</h4>
+      </div>
+    </div>
+  </section>
 
-<h2>Produk Terbaru</h2>
+  <!-- PANEL KERANJANG & CHECKOUT OTOMATIS + ONGKIR -->
+  <div x-show="bukaKeranjang" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end" x-transition>
+    <div @click.away="bukaKeranjang = false" class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between shadow-2xl">
+      <div>
+        <div class="flex justify-between items-center pb-4 border-b">
+          <h3 class="text-lg font-bold">Keranjang Belanja</h3>
+          <button @click="bukaKeranjang = false" class="text-2xl">&times;</button>
+        </div>
 
-<div class="grid">
+        <!-- Daftar Barang di Keranjang -->
+        <div class="mt-4 space-y-4 overflow-y-auto max-h-[50vh]">
+          <template x-for="(item, index) in keranjang">
+            <div class="flex gap-4 bg-slate-50 p-3 rounded-xl items-center">
+              <img :src="item.foto[0]" class="w-16 h-16 object-cover rounded-lg">
+              <div class="flex-1">
+                <h4 class="font-bold text-sm" x-text="item.nama"></h4>
+                <p class="text-xs text-emerald-600 font-bold" x-text="'Rp ' + item.harga.toLocaleString('id-ID')"></p>
+                <div class="flex items-center gap-2 mt-2">
+                  <button @click="item.qty > 1 ? item.qty-- : keranjang.splice(index, 1)" class="bg-slate-200 px-2 rounded text-xs">-</button>
+                  <span class="text-sm font-bold" x-text="item.qty"></span>
+                  <button @click="item.qty++" class="bg-slate-200 px-2 rounded text-xs">+</button>
+                </div>
+              </div>
+            </div>
+          </template>
+          <p x-show="keranjang.length === 0" class="text-center text-slate-400 my-8">Keranjangmu masih kosong.</p>
+        </div>
+      </div>
 
-<div class="card">
-<img src="Kaos Kanibal depan.png" alt="Kaos">
-<h3>Kaos Kanibal depan</h3>
-<div class="price">Rp129.000</div>
-<a class="buy" href="https://wa.me/6285889005723?text=Saya%20ingin%20memesan%20Kaos%20Kanibal%20Premium">Beli Sekarang</a>
-</div>
+      <!-- Formulir Pengiriman & Checkout -->
+      <div class="border-t pt-4" x-show="keranjang.length > 0">
+        <div class="space-y-2 mb-4">
+          <input type="text" x-model="alamat.nama" placeholder="Nama Lengkap" class="w-full p-2 border rounded-lg text-sm">
+          <input type="text" x-model="alamat.kota" placeholder="Kota / Kabupaten (Untuk Cek Ongkir)" class="w-full p-2 border rounded-lg text-sm">
+          
+          <!-- Simulasi Pilihan Kurir & Ongkir Otomatis -->
+          <select x-model="alamat.kurir" @change="hitungOngkir()" class="w-full p-2 border rounded-lg text-sm">
+            <option value="">Pilih Ekspedisi (Hitung Ongkir)</option>
+            <option value="JNE">JNE Reguler (Rp 15.000)</option>
+            <option value="J&T">J&T Express (Rp 16.000)</option>
+            <option value="Sicepat">SiCepat REG (Rp 14.000)</option>
+          </select>
+        </div>
 
-<div class="card">
-<img src="hoodie kanibal depan.png" alt="Hoodie">
-<h3>Hoodie Kanibal depan</h3>
-<div class="price">Rp249.000</div>
-<a class="buy" href="https://wa.me/6285889005723?text=Saya%20ingin%20memesan%20Hoodie%20Kanibal">Beli Sekarang</a>
-</div>
+        <div class="space-y-1 text-sm border-b pb-3 mb-3">
+          <div class="flex justify-between"><span>Subtotal:</span><span class="font-bold" x-text="'Rp ' + totalHarga().toLocaleString('id-ID')"></span></div>
+          <div class="flex justify-between"><span>Ongkos Kirim:</span><span class="font-bold" x-text="'Rp ' + ongkir.toLocaleString('id-ID')"></span></div>
+          <div class="flex justify-between text-lg font-black text-emerald-600"><span>Total Bayar:</span><span x-text="'Rp ' + (totalHarga() + ongkir).toLocaleString('id-ID')"></span></div>
+        </div>
 
-<div class="card">
-<img src="jersey kanibal.png" alt="Jersey">
-<h3>Jersey kanibal</h3>
-<div class="price">Rp189.000</div>
-<a class="buy" href="https://wa.me/6285889005723?text=Saya%20ingin%20memesan%20Jersey">Beli Sekarang</a>
-</div>
+        <button @click="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2">
+          📱 Checkout Otomatis via WA
+        </button>
+      </div>
+    </div>
+  </div>
 
-<div class="card">
-<img src="topi kanibal.png" alt="Topi">
-<h3>Topi Kanibal</h3>
-<div class="price">Rp89.000</div>
-<a class="buy" href="https://wa.me/6285889005723?text=Saya%20ingin%20memesan%20Topi">Beli Sekarang</a>
-</div>
+  <!-- JAVASCRIPT ENGINE TOKO -->
+  <script>
+    function tokoOnline() {
+      return {
+        cari: '',
+        kategoriTerpilih: 'Semua',
+        bukaKeranjang: false,
+        keranjang: [],
+        ongkir: 0,
+        alamat: { nama: '', kota: '', kurir: '' },
+        
+        // Database Produk (Sesuaikan nama file dengan gambar di GitHub kamu)
+        produk: [
+          { id: 1, nama: 'Kaos Kanibal Premium', kategori: 'Kaos', harga: 85000, foto: ['kaos kanibal depan.png', 'jersey kanibal.png'], fotoAktif: 0 },
+          { id: 2, nama: 'Hoodie Kanibal Streetwear', kategori: 'Hoodie', harga: 185000, foto: ['hoodie kanibal depan.png'], fotoAktif: 0 },
+          { id: 3, nama: 'Jaket Coach Kanibal', kategori: 'Jaket', harga: 165000, foto: ['jaket.png'], fotoAktif: 0 },
+          { id: 4, nama: 'Jersey Sport Kanibal', kategori: 'Jersey', harga: 95000, foto: ['jersey kanibal.png'], fotoAktif: 0 },
+          { id: 5, nama: 'Tas Ransel Kanibal', kategori: 'Tas', harga: 125000, foto: ['tas kanibal.png'], fotoAktif: 0 },
+          { id: 6, nama: 'Topi Snapback Kanibal', kategori: 'Topi', harga: 45000, foto: ['topi kanibal.png'], fotoAktif: 0 }
+        ],
 
-<div class="card">
-<img src="tas kanibal.png" alt="Tas">
-<h3>Tas Kanibal</h3>
-<div class="price">Rp159.000</div>
-<a class="buy" href="https://wa.me/6285889005723?text=Saya%20ingin%20memesan%20Tas">Beli Sekarang</a>
-</div>
+        produkTersaring() {
+          return this.produk.filter(p => {
+            const cocokKategori = this.kategoriTerpilih === 'Semua' || p.kategori === this.kategoriTerpilih;
+            const cocokCari = p.nama.toLowerCase().includes(this.cari.toLowerCase());
+            return cocokKategori && cocokCari;
+          });
+        },
 
-<div class="card">
-<img src="jaket.png" alt="Jaket">
-<h3>Jaket</h3>
-<div class="price">Rp329.000</div>
-<a class="buy" href="https://wa.me/6285889005723?text=Saya%20ingin%20memesan%20Jaket">Beli Sekarang</a>
-</div>
+        tambahKeKeranjang(p) {
+          let item = this.keranjang.find(i => i.id === p.id);
+          if (item) {
+            item.qty++;
+          } else {
+            this.keranjang.push({ ...p, qty: 1 });
+          }
+          this.bukaKeranjang = true;
+        },
 
-</div>
+        hitungOngkir() {
+          if (this.alamat.kurir === 'JNE') this.ongkir = 15000;
+          else if (this.alamat.kurir === 'J&T') this.ongkir = 16000;
+          else if (this.alamat.kurir === 'Sicepat') this.ongkir = 14000;
+          else this.ongkir = 0;
+        },
 
-</section>
+        totalHarga() {
+          return this.keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+        },
 
-<footer>
+        checkoutWhatsApp() {
+          if (!this.alamat.nama || !this.alamat.kota || !this.alamat.kurir) {
+            alert('Mohon lengkapi data pengiriman dan pilih kurir!');
+            return;
+          }
 
-<h3>Kanibal Store</h3>
+          let nomorWA = "6285889005723"; // ⚠️ GANTI DENGAN NOMOR WHATSAPP KAMU (Awali dengan 62)
+          let teks = *Halo Kanibal Store, Saya mau order:*\n\n;
+          
+          this.keranjang.forEach(item => {
+            teks += • ${item.nama} (${item.qty}x) -> Rp ${(item.harga * item.qty).toLocaleString('id-ID')}\n;
+          });
 
-<p>Fashion Streetwear Premium Indonesia</p>
+          teks += \n*Detail Pengiriman:*;
+          teks += \nNama: ${this.alamat.nama};
+          teks += \nKota Tujuan: ${this.alamat.kota};
+          teks += \nEkspedisi: ${this.alamat.kurir} (Rp ${this.ongkir.toLocaleString('id-ID')});
+          teks += \n\n*Total Bayar: Rp ${(this.totalHarga() + this.ongkir).toLocaleString('id-ID')}*;
 
-<p>Email : kanibalstore@gmail.com</p>
-
-<p>Instagram : @kanibal_banten</p>
-
-<p>&copy; 2026 Kanibal Store. All Rights Reserved.</p>
-
-</footer>
-
+          window.open(https://api.whatsapp.com/send?phone=${nomorWA}&text=${encodeURIComponent(teks)}, '_blank');
+        }
+      }
+    }
+  </script>
 </body>
 </html>
-</section>
