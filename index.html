@@ -201,18 +201,26 @@
         },
         checkoutWhatsApp() {
           if (!this.alamat.nama || !this.alamat.kota || !this.alamat.kurir) {
-            alert('Mohon isi alamat lengkap dan kurir terlebih dahulu!');
+            alert("Mohon isi alamat lengkap dan kurir terlebih dahulu!");
             return;
           }
-          let nomorWA = "6285889005723"; // Ganti dengan nomor WA tokomu (awal 62)
-          let teks = *Halo Admin Kanibal Store, saya mau pesan:*\n\n;
-          this.keranjang.forEach(i => { teks += • ${i.nama} (${i.qty}x)\n; });
-          teks += \n*Detail Alamat & Kiriman:*;
-          teks += \nNama Lengkap: ${this.alamat.nama};
-          teks += \nKota Tujuan: ${this.alamat.kota};
-          teks += \nEkspedisi: ${this.alamat.kurir} (Ongkir: Rp ${this.ongkir.toLocaleString('id-ID')});
-          teks += \n\n*Total Tagihan Akhir: Rp ${(this.totalHarga() + this.ongkir).toLocaleString('id-ID')}*;
-          window.open(https://api.whatsapp.com/send?phone=${nomorWA}&text=${encodeURIComponent(teks)}, '_blank');
+          var nomorWA = "6285889005723"; 
+          var teks = "Halo Admin Kanibal Store, saya mau pesan:\n\n";
+          
+          this.keranjang.forEach(function(i) { 
+            teks += "• " + i.nama + " (" + i.qty + "x)\n"; 
+          });
+          
+          teks += "\n*Detail Alamat & Kiriman:*";
+          teks += "\nNama Lengkap: " + this.alamat.nama;
+          teks += "\nKota Tujuan: " + this.alamat.kota;
+          teks += "\nEkspedisi: " + this.alamat.kurir + " (Ongkir: Rp " + this.ongkir.toLocaleString("id-ID") + ")";
+          teks += "\n\n*Total Tagihan Akhir: Rp " + (this.totalHarga() + this.ongkir).toLocaleString("id-ID") + "*";
+          
+          var urlWA = "https://api.whatsapp.com/send?phone=" + nomorWA + "&text=" + encodeURIComponent(teks);
+          window.open(urlWA, "_blank");
+        }
+        }
         }
       }
     }
