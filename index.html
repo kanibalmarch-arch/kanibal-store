@@ -24,11 +24,39 @@
   </nav>
 
   <!-- HERO & PENCARIAN & KATEGORI -->
-  <header class="max-w-7xl mx-auto px-4 mt-8">
-    <div class="bg-slate-950 text-white p-8 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-6">
-      <div>
-        <h2 class="text-3xl font-bold">Koleksi Pakaian Terbaik</h2>
-        <p class="text-slate-400 mt-2 text-sm">Temukan gaya otentikmu di sini.</p>
+ <div class="bg-gradient-to-r from-slate-950 via-slate-800 to-black text-white rounded-3xl overflow-hidden">
+
+    <div class="p-10 md:p-16">
+
+        <span class="bg-red-600 px-3 py-1 rounded-full text-xs font-bold">
+            NEW COLLECTION 2026
+        </span>
+
+        <h2 class="text-5xl font-black mt-5 leading-tight">
+            KANIBAL<br>STREETWEAR
+        </h2>
+
+        <p class="text-slate-300 mt-5 max-w-xl">
+            Streetwear premium dengan kualitas terbaik.
+            Nyaman dipakai setiap hari, desain eksklusif,
+            dibuat untuk kamu yang ingin tampil berbeda.
+        </p>
+
+        <div class="flex gap-4 mt-8">
+
+            <button class="bg-white text-black font-bold px-6 py-3 rounded-xl">
+                Belanja Sekarang
+            </button>
+
+            <button class="border border-white px-6 py-3 rounded-xl">
+                Lihat Koleksi
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
       </div>
       
       <!-- Kolom Pencarian -->
@@ -116,7 +144,18 @@
     <div @click.away="bukaKeranjang = false" class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between shadow-2xl">
       <div>
         <div class="flex justify-between items-center pb-4 border-b">
-          <h3 class="text-lg font-bold">Keranjang Belanja</h3>
+          <div class="flex items-center gap-2 mt-3">
+    <span class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+        BEST SELLER
+    </span>
+
+    <span class="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+        READY STOCK
+    </span>
+</div>
+
+<h3 class="font-extrabold text-slate-900 text-xl md:text-2xl mt-3 tracking-tight"
+    x-text="produk.nama">
           <button @click="bukaKeranjang = false" class="text-2xl">&times;</button>
         </div>
         <div class="mt-4 space-y-4 overflow-y-auto max-h-[50vh]">
@@ -125,9 +164,23 @@
               <img :src="item.foto[0]" class="w-16 h-16 object-cover rounded-lg">
               <div class="flex-1">
                 <h4 class="font-bold text-sm" x-text="item.nama"></h4>
-                <p class="text-xs text-emerald-600 font-bold" x-text="'Rp ' + item.harga.toLocaleString('id-ID')"></p>
+               
                 <div class="flex items-center gap-2 mt-2">
-                  <button @click="item.qty > 1 ? item.qty-- : keranjang.splice(index, 1)" class="bg-slate-200 px-2 rounded text-xs">-</button>
+                <div class="mt-2">
+    <p class="text-emerald-600 font-black text-2xl"
+       x-text="'Rp ' + produk.harga.toLocaleString('id-ID')">
+    </p>
+
+    <div class="flex items-center gap-3 mt-1">
+        <span class="text-slate-400 line-through text-sm"
+              x-text="'Rp ' + (produk.harga + 50000).toLocaleString('id-ID')">
+        </span>
+
+        <span class="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+            HEMAT Rp50.000
+        </span>
+    </div>
+</div>  <button @click="item.qty > 1 ? item.qty-- : keranjang.splice(index, 1)" class="bg-slate-200 px-2 rounded text-xs">-</button>
                   <span class="text-sm font-bold" x-text="item.qty"></span>
                   <button @click="item.qty++" class="bg-slate-200 px-2 rounded text-xs">+</button>
                 </div>
@@ -164,26 +217,26 @@
   <script>
     function tokoOnline() {
       return {
-        cari: '',
-        kategoriTerpilih: 'Semua',
+        cari: "",
+        kategoriTerpilih: "Semua",
         bukaKeranjang: false,
         keranjang: [],
         ongkir: 0,
-        alamat: { nama: '', kota: '', kurir: '' },
+        alamat: { nama: "", kota: "", kurir: "" },
         
         // Database Produk Resmi
         produk: [
-          { id: 1, nama: 'Kaos Kanibal - Identity in Simplicity', kategori: 'Kaos', harga: 125000, foto: ['kaos kanibal depan.png', 'jersey kanibal.png'], fotoAktif: 0, deskripsi: 'Kaos bertema minimalis modern dengan tagline "Identity in Simplicity". Dibuat menggunakan bahan katun premium super adem, sangat nyaman untuk penggunaan harian, serta memiliki potongan pola yang pas badan.' },
-          { id: 2, nama: 'Hoodie Kanibal Streetwear', kategori: 'Hoodie', harga: 225000, foto: ['hoodie kanibal depan.png'], fotoAktif: 0, deskripsi: 'Hoodie bersiluet kasual dengan bahan fleece tebal premium yang lembut di kulit. Jahitan rapi berkekuatan ganda cocok dipadukan dengan gaya jalanan (streetwear) masa kini.' },
-          { id: 3, nama: 'Jaket Bomber Kanibal', kategori: 'Jaket', harga: 355000, foto: ['jaket.png'], fotoAktif: 0, deskripsi: 'Jaket jenis coach fungsional berbahan taslan tahan angin ringan. Dilengkapi kancing klip premium dan saku dalam, pas untuk berkendara motor atau nongkrong malam.' },
-          { id: 4, nama: 'Jersey casual Kanibal', kategori: 'Jersey', harga: 135000, foto: ['jersey kanibal.png'], fotoAktif: 0, deskripsi: 'Jersey olahraga dengan material berpori mikro (dry-fit) anti gerah yang sangat cepat menyerap keringat. Nyaman maksimal untuk futsal, lari, maupun olahraga berat.' },
-          { id: 5, nama: 'Tas handbag Kanibal', kategori: 'Tas', harga: 165000, foto: ['tas kanibal.png'], fotoAktif: 0, deskripsi: 'Tas ransel berkapasitas besar dengan slot laptop khusus berlapis busa pengaman. Tahan cipratan air ringan, cocok mendampingi rutinitas kerja atau sekolah.' },
-          { id: 6, nama: 'Topi Snapback Kanibal', kategori: 'Topi', harga: 75000, foto: ['topi kanibal.png'], fotoAktif: 0, deskripsi: 'Topi model snapback berstruktur kokoh dengan pengatur ukuran sabuk di bagian belakang. Detail bordir timbul eksklusif mempertegas aksen kasual harianmu.' }
+          { id: 1, nama: "Kaos Kanibal - Identity in Simplicity", kategori: "Kaos", harga: 125000, foto: ["kaos kanibal depan.png", "jersey kanibal.png"], fotoAktif: 0, deskripsi: "Kaos bertema minimalis modern dengan tagline 'Identity in Simplicity'. Dibuat menggunakan bahan katun premium super adem, sangat nyaman untuk penggunaan harian, serta memiliki potongan pola yang pas badan." },
+          { id: 2, nama: "Hoodie Kanibal Streetwear", kategori: "Hoodie", harga: 225000, foto: ["hoodie kanibal depan.png"], fotoAktif: 0, deskripsi: "Hoodie bersiluet kasual dengan bahan fleece tebal premium yang lembut di kulit. Jahitan rapi berkekuatan ganda cocok dipadukan dengan gaya jalanan (streetwear) masa kini." },
+          { id: 3, nama: "Jaket Bomber Kanibal", kategori: "Jaket", harga: 355000, foto: ["jaket.png"], fotoAktif: 0, deskripsi: "Jaket jenis coach fungsional berbahan taslan tahan angin ringan. Dilengkapi kancing klip premium dan saku dalam, pas untuk berkendara motor atau nongkrong malam." },
+          { id: 4, nama: "Jersey casual Kanibal", kategori: "Jersey", harga: 135000, foto: ["jersey kanibal.png"], fotoAktif: 0, deskripsi: "Jersey olahraga dengan material berpori mikro (dry-fit) anti gerah yang sangat cepat menyerap keringat. Nyaman maksimal untuk futsal, lari, maupun olahraga berat." },
+          { id: 5, nama: "Tas handbag Kanibal", kategori: "Tas", harga: 165000, foto: ["tas kanibal.png"], fotoAktif: 0, deskripsi: "Tas ransel berkapasitas besar dengan slot laptop khusus berlapis busa pengaman. Tahan cipratan air ringan, cocok mendampingi rutinitas kerja atau sekolah." },
+          { id: 6, nama: "Topi Snapback Kanibal", kategori: 'Topi', harga: 75000, foto: ["topi kanibal.png"], fotoAktif: 0, deskripsi: "Topi model snapback berstruktur kokoh dengan pengatur ukuran sabuk di bagian belakang. Detail bordir timbul eksklusif mempertegas aksen kasual harianmu." }
         ],
 
         produkTersaring() {
           return this.produk.filter(p => {
-            const cocokKategori = this.kategoriTerpilih === 'Semua' || p.kategori === this.kategoriTerpilih;
+            const cocokKategori = this.kategoriTerpilih === "Semua" || p.kategori === this.kategoriTerpilih;
             const cocokCari = this.cari ? p.nama.toLowerCase().includes(this.cari.toLowerCase()) : true;
             return cocokKategori && cocokCari;
           });
@@ -194,7 +247,7 @@
           this.bukaKeranjang = true;
         },
         hitungOngkir() {
-          this.ongkir = this.alamat.kurir === 'JNE' ? 15000 : (this.alamat.kurir === 'J&T' ? 16000 : 0);
+          this.ongkir = this.alamat.kurir === "JNE" ? 15000 : (this.alamat.kurir === "J&T" ? 16000 : 0);
         },
         totalHarga() {
           return this.keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
@@ -219,8 +272,6 @@
           
           var urlWA = "https://api.whatsapp.com/send?phone=" + nomorWA + "&text=" + encodeURIComponent(teks);
           window.open(urlWA, "_blank");
-        }
-        }
         }
       }
     }
